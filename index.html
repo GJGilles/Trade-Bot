@@ -2,19 +2,33 @@
 <html>
 <head>
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+	<script src="/lib/jquery-1.11.2.js"></script>
+	<link rel="stylesheet" href="/lib/bootstrap-3.3.2-dist/css/bootstrap.min.css">
+	<script src="/lib/bootstrap-3.3.2-dist/js/bootstrap.min.js"></script>
 	<script src="script.js"></script>
 <head>
-<body>
-	<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto" class="col-xs-8"></div>
-	<div id="responseFld" class="col-xs-2">
+<body style="background-color: grey;">
+	<div class="row">
+		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto" class="col-xs-8"></div>
+		<div id="responseFld" class="col-xs-2"></div>
+	</div>
+	</br>
+	<div class="row">
+		<div class="col-xs-2">
+			<label>API KEY<input id="apiKeyFld"/></label>
+		</div>
+		<div class="col-xs-2"></div>
+		<div class="col-xs-2">
+			<label>SECRET KEY<input id="secretKeyFld"/></label>
+		</div>
+		<div class="col-xs-2"></div>
+		<div class="col-xs-2">
+			<button id="submitButton" onclick="tradeClass.getLoginInfo">Start</button>
+		</div>
 	</div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.15/require.min.js"></script>
-<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha512.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script src="lib/moment.js"></script>
+<script src="/lib/highcharts/js/highcharts.js"></script>
+<script src="/lib/highcharts/js/modules/exporting.js"></script>
+<script src="/lib/q-1/q.js"></script>
 </html>
