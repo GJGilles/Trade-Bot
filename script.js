@@ -47,29 +47,37 @@ var tradeClass = {
 			tradeClass.tradeVals['USD/BTC'].ask = data['BTCUSD'].ask;	
 			tradeClass.tradeVals['USD/BTC'].bid = data['BTCUSD'].bid;
 			tradeClass.tradeVals['USD/BTC'].lot = data['BTCUSD'].lot;
+			tradeClass.tradeVals['USD/BTC'].low = data['BTCUSD'].low;
+			tradeClass.tradeVals['USD/BTC'].high = data['BTCUSD'].high;
+			tradeClass.tradeVals['USD/BTC'].volume = data['BTCUSD'].volume;
 			$.each(data, function(idx){
 				if(idx.substr(idx.length - 3, 3) == 'BTC'){
 					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)] = {};
 					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].ask = (parseFloat(tradeClass.tradeVals['USD/BTC'].ask)*(parseFloat(this.ask)));
 					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].bid = (parseFloat(tradeClass.tradeVals['USD/BTC'].bid)*(parseFloat(this.bid)));	
-					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].lot = ((parseFloat(this.lot)));	
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].lot = parseFloat(this.lot);	
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].low = (parseFloat(tradeClass.tradeVals['USD/BTC'].low)*(parseFloat(this.low)));
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].high = (parseFloat(tradeClass.tradeVals['USD/BTC'].high)*(parseFloat(this.high)));
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].volume = parseFloat(this.volume);
 				}
 			});
-			var chartData = [[], []];
-			chartData[1].push({name:"Ask", data:[]});
-			chartData[1].push({name:"Bid", data:[]});
-			$.each(tradeClass.tradeVals, function(idx){
-				if(idx == 'USD/BTC' && !$('#showBTCValue')[0].checked){
-					return true;
-				}
-				chartData[0].push(idx +", Lot: "+this.lot);
-				chartData[1][0]['data'].push(parseFloat(this.ask)*parseFloat(this.lot));
-				chartData[1][1]['data'].push(parseFloat(this.bid)*parseFloat(this.lot));
-			});
-			tradeClass.loadTradeValChart(chartData);
+			
+			tradeClass.loadTradeValChart();
+			tradeClass.loadMarketMoveChart();
 		});
 	},
-	loadTradeValChart: function(data){
+	loadTradeValChart: function(){
+		var chartData = [[], []];
+		chartData[1].push({name:"Ask", data:[]});
+		chartData[1].push({name:"Bid", data:[]});
+		$.each(tradeClass.tradeVals, function(idx){
+			if(idx == 'USD/BTC' && !$('#showBTCValue')[0].checked){
+				return true;
+			}
+			chartData[0].push(idx +", Lot: "+this.lot);
+			chartData[1][0]['data'].push(parseFloat(this.ask)*parseFloat(this.lot));
+			chartData[1][1]['data'].push(parseFloat(this.bid)*parseFloat(this.lot));
+		});
 		$('#currChartContainer').highcharts({
 			chart: {
 	            type: 'column',
@@ -81,7 +89,7 @@ var tradeClass = {
 	        },
 
 	        xAxis: {
-	            categories: data[0]
+	            categories: chartData[0]
 	        },
 
 	        yAxis: {
@@ -105,7 +113,31 @@ var tradeClass = {
 	            enabled: false
 	        },
 
-	        series: data[1]
+	        series: chartData[1]
 		});
+	},
+	loadMarketMoveChart: function(){
+		var chartData = [[], []];
+		chartData[1].push({type: 'column', name:"High", data:[]});
+		chartData[1].push({type: 'column', name:"Low", data:[]});
+		chartData[1].push({type: 'pie', name: 'Percentage of Market Movement', data:[], center: [300, 50], size: 100, showInLegend: false, dataLabels: {enabled: false}});
+		$.each(tradeClass.tradeVals, function(idx){
+			if(idx == 'USD/BTC' && !$('#showBTCValue')[0].checked){
+				return true;
+			}
+			chartData[0].push(idx.substr(4, idx.length-3));
+			chartData[1][0]['data'].push(parseFloat(this.high)*parseFloat(this.volume));
+			chartData[1][1]['data'].push(parseFloat(this.low)*parseFloat(this.volume));
+			chartData[1][2]['data'].push({name: idx.substr(4, idx.length-3), y: parseFloat(this.high)*parseFloat(this.volume)});
+		});
+		$('#marketMoveChartContainer').highcharts({
+			title: {
+	            text: 'Market Movement'
+	        },
+	        xAxis: {
+	            categories: chartData[0]
+	        },
+	        series: chartData[1]
+	    });
 	}
 }
