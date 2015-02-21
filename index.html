@@ -4,31 +4,38 @@
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 	<script src="/lib/jquery-1.11.2.js"></script>
 	<link rel="stylesheet" href="/lib/bootstrap-3.3.2-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/lib/jquery-ui-1.11.3.custom/jquery-ui.css">
+	<script src="/lib/jquery-ui-1.11.3.custom/external/jquery/jquery.js"></script>
+	<script src="/lib/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
 	<script src="/lib/bootstrap-3.3.2-dist/js/bootstrap.min.js"></script>
 	<script src="script.js"></script>
 <head>
 <body style="background-color: grey;">
-	<div class="row">
-		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto" class="col-xs-8"></div>
-		<div id="responseFld" class="col-xs-2"></div>
-	</div>
-	</br>
-	<div class="row">
-		<div class="col-xs-2">
-			<label>API KEY<input id="apiKeyFld"/></label>
+	<div id="accordion">
+		<h3> Input Info </h3>
+		<div class="row">
+			<div class="col-xs-2">
+				<label>API KEY<input id="apiKeyFld"/></label>
+			</div>
+			<div class="col-xs-2"></div>
+			<div class="col-xs-2">
+				<label>SECRET KEY<input id="secretKeyFld"/></label>
+			</div>
+			<div class="col-xs-2"></div>
+			<div class="col-xs-2">
+				<button class="btn btn-warning" id="submitButton" onclick="tradeClass.getLoginInfo">Start</button>
+			</div>
 		</div>
-		<div class="col-xs-2"></div>
-		<div class="col-xs-2">
-			<label>SECRET KEY<input id="secretKeyFld"/></label>
-		</div>
-		<div class="col-xs-2"></div>
-		<div class="col-xs-2">
-			<button id="submitButton" onclick="tradeClass.getLoginInfo">Start</button>
+		<h3> Performance Graph </h3>
+		<div class="row">
+			<div id="perfChartContainer" style="min-width: 310px; height: 400px; margin: 0 auto" class="col-xs-8"></div>
+			<div id="responseFld" class="col-xs-2"></div>
 		</div>
 	</div>
 </body>
 <script src="lib/moment.js"></script>
-<script src="/lib/highcharts/js/highcharts.js"></script>
+<script src="/lib/highcharts/js/highcharts.js"></script>	
+<script src="/lib/highcharts/js/themes/dark-unica.js"></script>
 <script src="/lib/highcharts/js/modules/exporting.js"></script>
 <script src="/lib/q-1/q.js"></script>
 </html>
