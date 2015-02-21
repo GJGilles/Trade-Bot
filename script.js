@@ -1,67 +1,111 @@
 $(function () {
 
-	$('#accordion').accordion();
-
-	tradeClass.loadChart();
+	$('#accordionLogin').accordion();
+	$('#accordionGraph').accordion();
 
 });
 
 var tradeClass = {
+	isRepeating: false,
 	apiKey: null,
 	secretKey: null,
+	tradeVals: {},
+	init: function(){
+		if(tradeClass.isRepeating){
+			window.clearInterval(tradeClass.isRepeating);
+		}
+		tradeClass.getLoginInfo();
+		tradeClass.isRepeating = window.setInterval(function() {tradeClass.mainLoop()}, 5000);
+	},
+	mainLoop: function(){
+		tradeClass.getTradeVals();
+	},
 	getLoginInfo: function(){
 		tradeClass.apiKey = $('#apiKeyFld')[0].value;
 		tradeClass.secretKey = $('#secretKeyFld')[0].value;
 	},
 	getTradeVals: function(){
-		$.get('')
+		
+		Q($.ajax({dataType: "json", url:'//api.hitbtc.com/api/1/public/ticker'}))
+		.then(function(data){
+			if(typeof data['BTCUSD'] == 'undefined') return;
+			var done = Q.defer();
+			Q($.ajax({dataType: "json", url:'//api.hitbtc.com/api/1/public/symbols'}))
+			.then(function(info){
+				$.each(info.symbols, function(){
+					var index = this.symbol;
+					$.each(this, function(idx, val){
+						data[index][idx] = val;
+					});
+				});
+				done.resolve(data);
+			});
+			return done.promise;
+		}).then(function(data){
+			if(typeof data['BTCUSD'].lot == 'undefined') return;
+			tradeClass.tradeVals['USD/BTC'] = {};
+			tradeClass.tradeVals['USD/BTC'].ask = data['BTCUSD'].ask;	
+			tradeClass.tradeVals['USD/BTC'].bid = data['BTCUSD'].bid;
+			tradeClass.tradeVals['USD/BTC'].lot = data['BTCUSD'].lot;
+			$.each(data, function(idx){
+				if(idx.substr(idx.length - 3, 3) == 'BTC'){
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)] = {};
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].ask = (parseFloat(tradeClass.tradeVals['USD/BTC'].ask)*(parseFloat(this.ask)));
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].bid = (parseFloat(tradeClass.tradeVals['USD/BTC'].bid)*(parseFloat(this.bid)));	
+					tradeClass.tradeVals['USD/'+idx.substr(0, idx.length - 3)].lot = ((parseFloat(this.lot)));	
+				}
+			});
+			var chartData = [[], []];
+			chartData[1].push({name:"Ask", data:[]});
+			chartData[1].push({name:"Bid", data:[]});
+			$.each(tradeClass.tradeVals, function(idx){
+				if(idx == 'USD/BTC' && !$('#showBTCValue')[0].checked){
+					return true;
+				}
+				chartData[0].push(idx +", Lot: "+this.lot);
+				chartData[1][0]['data'].push(parseFloat(this.ask)*parseFloat(this.lot));
+				chartData[1][1]['data'].push(parseFloat(this.bid)*parseFloat(this.lot));
+			});
+			tradeClass.loadTradeValChart(chartData);
+		});
 	},
-	loadChart: function(){
-		$('#perfChartContainer').highcharts({
-			title: {
-	            text: 'Monthly Average Temperature',
-	            x: -20 //center
+	loadTradeValChart: function(data){
+		$('#currChartContainer').highcharts({
+			chart: {
+	            type: 'column',
+	            inverted: true
 	        },
-	        subtitle: {
-	            text: 'Source: WorldClimate.com',
-	            x: -20
+
+	        title: {
+	            text: 'Current Crypto Prices'
 	        },
+
 	        xAxis: {
-	            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-	                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+	            categories: data[0]
 	        },
+
 	        yAxis: {
 	            title: {
-	                text: 'Temperature (°C)'
-	            },
-	            plotLines: [{
-	                value: 0,
-	                width: 1,
-	                color: '#808080'
-	            }]
+	                text: 'Price in USD'
+	            }
 	        },
-	        tooltip: {
-	            valueSuffix: '°C'
+
+	        plotOptions: {
+	            columnrange: {
+	                dataLabels: {
+	                    enabled: true,
+	                    formatter: function () {
+	                        return this.y + '$';
+	                    }
+	                }
+	            }
 	        },
+
 	        legend: {
-	            layout: 'vertical',
-	            align: 'right',
-	            verticalAlign: 'middle',
-	            borderWidth: 0
+	            enabled: false
 	        },
-	        series: [{
-	            name: 'Tokyo',
-	            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-	        }, {
-	            name: 'New York',
-	            data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-	        }, {
-	            name: 'Berlin',
-	            data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-	        }, {
-	            name: 'London',
-	            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-	        }]
+
+	        series: data[1]
 		});
 	}
 }

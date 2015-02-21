@@ -7,34 +7,54 @@
 	<link rel="stylesheet" href="/lib/jquery-ui-1.11.3.custom/jquery-ui.css">
 	<script src="/lib/jquery-ui-1.11.3.custom/external/jquery/jquery.js"></script>
 	<script src="/lib/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
+	<script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
 	<script src="/lib/bootstrap-3.3.2-dist/js/bootstrap.min.js"></script>
 	<script src="script.js"></script>
 <head>
 <body style="background-color: grey;">
-	<div id="accordion">
+	<div id="accordionLogin" class="col-xs-6">
 		<h3> Input Info </h3>
-		<div class="row">
-			<div class="col-xs-2">
-				<label>API KEY<input id="apiKeyFld"/></label>
+		<div style="max-height: 200px;">
+			<div class="row">
+				<div class="col-xs-3">
+					<label>API KEY<input id="apiKeyFld" style="color: black;" /></label>
+				</div>
+			</div>	
+			<div class="row">
+				<div class="col-xs-3">
+					<label>SECRET KEY<input id="secretKeyFld"  style="color: black;"/></label>
+				</div>
 			</div>
-			<div class="col-xs-2"></div>
-			<div class="col-xs-2">
-				<label>SECRET KEY<input id="secretKeyFld"/></label>
-			</div>
-			<div class="col-xs-2"></div>
-			<div class="col-xs-2">
-				<button class="btn btn-warning" id="submitButton" onclick="tradeClass.getLoginInfo">Start</button>
+			<div class="row">
+				<div class="col-xs-2">
+					<button class="btn btn-warning" id="submitButton" onclick="tradeClass.init()">Start</button>
+				</div>
+				<div class="col-xs-1"></div>
+				<div class="col-xs-2">
+					<button class="btn btn-danger" onclick="window.clearInterval(tradeClass.isRepeating)">Stop</button>
+				</div>
 			</div>
 		</div>
-		<h3> Performance Graph </h3>
+	</div>
+	<div id="accordionGraph" class="col-xs-6">
+		<h3> Current Trading Value </h3>
 		<div class="row">
-			<div id="perfChartContainer" style="min-width: 310px; height: 400px; margin: 0 auto" class="col-xs-8"></div>
-			<div id="responseFld" class="col-xs-2"></div>
+			<div class="checkbox"><label><input id="showBTCValue" type="checkbox"/>Show BTC</label></div>
+			<div  style="min-height: 450px;">
+				<div id="currChartContainer"></div>
+			</div>
+		</div>
+		<h3> Coin Market Caps </h3>
+		<div class="row">
+			<div  style="min-height: 450px">
+				<div id="marketCapChartContainer"></div>
+			</div>
 		</div>
 	</div>
 </body>
 <script src="lib/moment.js"></script>
-<script src="/lib/highcharts/js/highcharts.js"></script>	
+<script src="/lib/highcharts/js/highcharts.js"></script>
+<script src="/lib/highcharts/js/highcharts-more.js"></script>
 <script src="/lib/highcharts/js/themes/dark-unica.js"></script>
 <script src="/lib/highcharts/js/modules/exporting.js"></script>
 <script src="/lib/q-1/q.js"></script>
