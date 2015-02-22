@@ -10,6 +10,7 @@ var tradeClass = {
 	apiKey: null,
 	secretKey: null,
 	tradeVals: {},
+	historicData: [],
 	init: function(){
 		if(tradeClass.isRepeating){
 			window.clearInterval(tradeClass.isRepeating);
@@ -64,6 +65,7 @@ var tradeClass = {
 			
 			tradeClass.loadTradeValChart();
 			tradeClass.loadMarketMoveChart();
+			tradeClass.loadHistoricDataChart();
 		});
 	},
 	loadTradeValChart: function(){
@@ -138,6 +140,67 @@ var tradeClass = {
 	            categories: chartData[0]
 	        },
 	        series: chartData[1]
+	    });
+	},
+	loadHistoricDataChart: function(){
+		if (typeof tradeClass.historicData[0] == 'undefined'){
+			tradeClass.historicData[0] = [];
+			tradeClass.historicData[1] = [];
+			$.each(tradeClass.tradeVals, function(idx){
+				if(idx == 'USD/BTC' /*&& !$('#showBTCValue')[0].checked*/){
+					return true;
+				}
+				tradeClass.historicData[1].push({ name: idx.substr(4, idx.length-3) , type: 'line', yAxis: 0, data: [], tooltip: {valuePrefix: '$'}});
+				tradeClass.historicData[1].push({ name: idx.substr(4, idx.length-3) , type: 'line', yAxis: 1, data: [], tooltip: {valuePrefix: '$', valueSuffix: '/24h'}});
+			});
+		}
+		tradeClass.historicData[0].push(moment().format('Do MMM YYYY, hh:mm:ss'));
+		var i=0;
+		$.each(tradeClass.tradeVals, function(idx){
+			if(idx == 'USD/BTC' /*&& !$('#showBTCValue')[0].checked*/){
+				return true;
+			}
+			tradeClass.historicData[1][i]['data'].push((parseFloat(this.ask)*parseFloat(this.lot)+parseFloat(this.bid)*parseFloat(this.lot))/2);
+			i++;
+			tradeClass.historicData[1][i]['data'].push((parseFloat(this.low)*parseFloat(this.volume)+parseFloat(this.high)*parseFloat(this.volume))/2);
+			i++;
+		});
+		//Add date reformatting when there are multiple minutes/hours/days etc...
+
+		$('#marketHistoricChartContainer').highcharts({
+	        chart: {
+	            zoomType: 'xy'
+	        },
+	        title: {
+	            text: 'Market Data Since Program Start'
+	        },
+	        xAxis: [{
+	            categories: tradeClass.historicData[0],
+	            crosshair: true
+	        }],
+	        yAxis: [{ // Primary yAxis
+	            labels: {
+	                format: '${value}',
+	            },
+	            title: {
+	                text: 'Trading Price'
+	            }
+	        }, { // Secondary yAxis
+	            title: {
+	                text: 'Market Movement'
+	            },
+	            labels: {
+	                format: '${value}/24h'
+	            },
+	            opposite: true
+	        }],
+	        tooltip: {
+	            shared: true
+	        },
+	        legend: {
+	            enabled: false
+	        },
+	        series: tradeClass.historicData[1]
 	    });
 	}
 }
