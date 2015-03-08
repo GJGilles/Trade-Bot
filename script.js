@@ -27,12 +27,24 @@ var tradeClass = {
 	},
 	getTradeVals: function(){
 		
-		Q($.ajax({dataType: "json", url:'//api.hitbtc.com/api/1/public/ticker'}))
-		.then(function(data){
+		Q($.ajax({
+			type: 'GET', 
+			url:'//api.hitbtc.com/api/1/public/ticker',
+			contentType:'text/plain',
+			xhrFields: {
+				withCredentials: false
+			}
+		})).then(function(data){
 			if(typeof data['BTCUSD'] == 'undefined') return;
 			var done = Q.defer();
-			Q($.ajax({dataType: "json", url:'//api.hitbtc.com/api/1/public/symbols'}))
-			.then(function(info){
+			Q($.ajax({
+				type: 'GET',
+				url:'//api.hitbtc.com/api/1/public/symbols',
+				contentType: 'text/plain',
+				xhrFields: {
+					withCredentials: false
+				}
+			})).then(function(info){
 				$.each(info.symbols, function(){
 					var index = this.symbol;
 					$.each(this, function(idx, val){
