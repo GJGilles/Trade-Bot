@@ -16,7 +16,7 @@ class TradingApi
 {
 	CONST HITBTC_API_URL = 'http://demo-api.hitbtc.com';
 	CONST HITBTC_TRADING_API_URL_SEGMENT = '/api/1/trading/';
-	private $_key, $_secret;
+	public $_key, $_secret, $interface;
 	private $_availableMethods = array(
 		'balance',
 		'orders/active',
@@ -91,11 +91,35 @@ function randomString($length) {
 	return $key;
 }
 
+session_start();
+if (isset($_SESSION['_key'])){
+	$_key = $_SESSION['_key'];
+	$_secret = $_SESSION['_secret'];
+}
+
 try{
 	switch ($_GET['a']){
-	case 'yay':
-		echo json_encode("Potato");
+	case 'newSession':
+		global $_key, $_secret;
+		$_SESSION['_key'] = $_GET['apiKey'];
+		$_SESSION['_secret'] = $_GET['secretKey'];
+		break;	
+
+	case 'testCase':
+		$interface = new \Hitbtc\TradingApi($_key, $_secret);
+		$newOrderId = randomString(rand(8, 30));
+		echo $interface->new_order(array(
+			'clientOrderId' => $newOrderId,
+			'symbol' => 'BTCUSD',
+			'side' => 'buy',
+			'price' => 100.01, // $100.01
+			'quantity' => 1, // 1 lot => 0.01 BTC
+			'type' => 'limit',
+			'timeInForce' => 'GTC'
+		));
+		break;
 	}
+
 }catch ( Exception $e ) {
 	echo json_encode( array( 'error'=>true, 'message'=>$e->getMessage() ) );
 }

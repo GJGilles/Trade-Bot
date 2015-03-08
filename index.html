@@ -17,7 +17,7 @@
 		<div style="max-height: 200px;">
 			<div class="row">
 				<div class="col-xs-2">
-					<button class="btn btn-warning" id="submitButton" onclick="tradeClass.init()">Start</button>
+					<button class="btn btn-warning" id="submitButton" onclick="tradeClass.initMarketData()">Start</button>
 				</div>
 				<div class="col-xs-1"></div>
 				<div class="col-xs-2">
@@ -40,6 +40,8 @@
 				<div class="col-xs-3">
 					<label>SECRET KEY<input id="secretKeyFld"  style="color: black;"/></label>
 				</div>
+				<div class="col-xs-2"></div>
+				<button class="col-xs-2 btn btn-success" onclick="tradeClass.initTradingAPI()">Start Trading!</button> 
 			</div>
 		</div>
 	</div>

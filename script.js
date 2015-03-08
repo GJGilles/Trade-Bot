@@ -1,5 +1,4 @@
 $(function () {
-
 	$('#accordionLogin').accordion();
 	$('#accordionGraph').accordion();
 
@@ -11,7 +10,7 @@ var tradeClass = {
 	secretKey: null,
 	tradeVals: {},
 	historicData: [],
-	init: function(){
+	initMarketData: function(){
 		if(tradeClass.isRepeating){
 			window.clearInterval(tradeClass.isRepeating);
 		}
@@ -214,5 +213,11 @@ var tradeClass = {
 	        },
 	        series: tradeClass.historicData[1]
 	    });
+	},
+	initTradingAPI: function(){
+		Q($.post('auth.php?a=newSession&apiKey='+$('#apiKeyFld')[0].value+'&secretKey='+$('#secretKeyFld')[0].value)
+		).then(function(){
+			$.post('auth.php?a=testCase');
+		});
 	}
 }
