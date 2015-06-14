@@ -1,75 +1,47 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-	<script src="/lib/jquery-1.11.2.js"></script>
-	<link rel="stylesheet" href="/lib/bootstrap-3.3.2-dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/lib/jquery-ui-1.11.3.custom/jquery-ui.css">
-	<script src="/lib/jquery-ui-1.11.3.custom/external/jquery/jquery.js"></script>
-	<script src="/lib/jquery-ui-1.11.3.custom/jquery-ui.js"></script>
-	<script src="https://cdn.socket.io/socket.io-1.3.4.js"></script>
-	<script src="/lib/bootstrap-3.3.2-dist/js/bootstrap.min.js"></script>
-	<script src="script.js"></script>
-<head>
+<?php
+	include 'base_top.php';
+?>
 <body style="background-color: grey;">
-	<div id="accordionLogin" class="col-md-6">
-		<h3>Start Market Data Tracking</h3>
-		<div style="max-height: 200px;">
-			<div class="row">
-				<div class="col-xs-2">
-					<button class="btn btn-warning" id="submitButton" onclick="tradeClass.initMarketData()">Start</button>
-				</div>
-				<div class="col-xs-1"></div>
-				<div class="col-xs-2">
-					<button class="btn btn-danger" onclick="window.clearInterval(tradeClass.isRepeating)">Stop</button>
-				</div>
-				<div class="col-xs-3"></div>
-				<div class="col-xs-3">
-					<div class="checkbox"><label><input id="showBTCValue" type="checkbox"/>Show BTC</label></div>
-				</div>
-			</div>
-		</div>
-		<h3> Input API Info </h3>
-		<div style="max-height: 200px;">
-			<div class="row">
-				<div class="col-xs-3">
-					<label>API KEY<input id="apiKeyFld" style="color: black;" /></label>
-				</div>
-			</div>	
-			<div class="row">
-				<div class="col-xs-3">
-					<label>SECRET KEY<input id="secretKeyFld"  style="color: black;"/></label>
-				</div>
-				<div class="col-xs-2"></div>
-				<button class="col-xs-2 btn btn-success" onclick="tradeClass.initTradingAPI()">Start Trading!</button> 
-			</div>
+	<?php
+		include 'nav_top.php';
+	?>
+	<div class="main-header"><h3>Glenn's Trading Interface</h3></div>
+	<br/>
+	<div class="text-bubble">
+		<div>
+			This is a page was created by Glennarthyr Gillespie with the intention to create an easier and more intuitive interface for trading cryptocurrency.
 		</div>
 	</div>
-	<div id="accordionGraph" class="col-md-6">
-		<h3> Current Trading Value </h3>
-		<div class="row">
-			<div  style="min-height: 450px;">
-				<div id="currChartContainer"></div>
-			</div>
+	<br/>
+	<div class="text-bubble" style="height: 50px;">
+		<span><strong>Useful Libraries</strong></span>
+		<br/>
+		<div class="col-xs-2">
+			<span class="col-xs-2">Bootstrap</span>
 		</div>
-		<h3> Coin Market Movement </h3>
-		<div class="row">
-			<div  style="min-height: 450px;">
-				<div id="marketMoveChartContainer"></div>
-			</div>
+		<div class="col-xs-2">
+			<span>JQuery</span>
 		</div>
-		<h3> Historic Data Tracking </h3>
-		<div class="row">
-			<div style="min-height: 450px;">
-				<div id="marketHistoricChartContainer"></div>
-			</div>
+		<div class="col-xs-2">
+			<span>JQuery UI</span>
+		</div>
+		<div class="col-xs-2">
+			<span>Highcharts</span>
+		</div>
+		<div class="col-xs-2">
+			<span>Moment.js</span>
+		</div>
+		<div class="col-xs-2">
+			<span>Q.js</span>
 		</div>
 	</div>
+	<?php
+	include 'nav_bot.php';
+	?>
 </body>
-<script src="/lib/moment.js"></script>
-<script src="/lib/highcharts/js/highcharts.js"></script>
-<script src="/lib/highcharts/js/highcharts-more.js"></script>
-<script src="/lib/highcharts/js/themes/dark-unica.js"></script>
-<script src="/lib/highcharts/js/modules/exporting.js"></script>
-<script src="/lib/q-1/q.js"></script>
+<?php
+	include 'base_bot.php';
+?>
 </html>

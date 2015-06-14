@@ -21,8 +21,11 @@ var tradeClass = {
 		tradeClass.getTradeVals();
 	},
 	getLoginInfo: function(){
-		tradeClass.apiKey = $('#apiKeyFld')[0].value;
-		tradeClass.secretKey = $('#secretKeyFld')[0].value;
+		if($('#apiKeyFld').length)
+		{
+			tradeClass.apiKey = $('#apiKeyFld')[0].value;
+			tradeClass.secretKey = $('#secretKeyFld')[0].value;
+		}
 	},
 	getTradeVals: function(){
 		

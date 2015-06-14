@@ -1,0 +1,31 @@
+.main-header {
+	background-color: #F0AD4E; 
+	padding: 1px; 
+	border-radius: 20px;
+}
+.main-header h3{
+	padding-left: 45px;
+}
+.text-bubble{
+	background-color: white; 
+	padding: 1px; 
+	border-radius: 10px;
+}
+.text-bubble > span{
+	padding: 5px;
+}
+
+
+
+li{
+	display: block;
+}
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+} 
+a {
+    display: block;
+    width: 100%;
+}
