@@ -5,7 +5,7 @@
 ?>
 <body style="background-color: grey;">
 	<?php
-		include 'nav_top.php';
+		include dirname(__FILE__) . '/nav_top.php';
 	?>
 	<div class="main-header"><h3>Glenn's Trading Interface</h3></div>
 	<br/>
@@ -38,10 +38,10 @@
 		</div>
 	</div>
 	<?php
-	include 'nav_bot.php';
+	include dirname(__FILE__) . '/nav_bot.php';
 	?>
 </body>
 <?php
-	include 'base_bot.php';
+	include dirname(__FILE__) . '/base_bot.php';
 ?>
 </html>
